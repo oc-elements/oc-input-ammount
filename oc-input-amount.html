@@ -55,10 +55,17 @@
                 return {
                     amount: {
                         type: Number,
-                        value: {},
+                        notify: true,
                         observer: '_formatAmount'
                     },
                 };
+            }
+
+            /**
+             * Checks if the form is valid
+             */
+            valdate(){
+                return this.$.amount.validate();
             }
 
             /**
