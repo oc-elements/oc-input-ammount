@@ -1,0 +1,99 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../paper-input/paper-input.html">
+
+
+<dom-module id="oc-input-amount">
+    <template>
+        <style>
+            .amount {
+                direction: rtl;
+                unicode-bidi: bidi-override;
+                --paper-input-container-input: {
+                    font-size: 1.6em !important
+                };
+
+                --paper-input-container-input-webkit-spinner: {
+                    display: none;
+                }
+            }
+        </style>
+        <paper-input id="amount"
+                     required
+                     autofocus
+                     class="amount"
+                     type="number"
+                     inputmode="numeric"
+                     name="amount"
+                     prevent-invalid-input
+                     value="{{amount}}"
+                     pattern="\s\d+(\.\d{1,2})*"
+                     min="0"
+                     step="0.01"
+                     placeholder="0.00"
+                     error="Not valid amount">
+            <div id="currencyPrefix" slot="suffix" style="padding-right: 8px; opacity: 0.4; font-size:1.6em !important">
+                R
+            </div>
+        </paper-input>
+    </template>
+
+    <script>
+        /**
+         * `oc-input-amount`
+         * Input Ammount
+         *
+         * @customElement
+         * @polymer
+         * @demo demo/index.html
+         */
+        class OcInputAmount extends Ordercloud.Formatter(Polymer.Element) {
+            static get is() {
+                return 'oc-input-amount';
+            }
+
+            static get properties() {
+                return {
+                    amount: {
+                        type: Number,
+                        value: {},
+                        observer: '_formatAmount'
+                    },
+                };
+            }
+
+            /**
+             * A handler that is called on input
+             */
+            _formatAmount(value, oldValue) {
+                // The initial property assignment is handled by `ready`.
+                if (oldValue === undefined || value === oldValue)
+                    return;
+                //Ensure value is a string
+                value = value ? value.toString() : '';
+                // Remove any . that are allready present
+                value = value.replace(/\./g, '');
+                var formattedValue = '';
+
+                //remove the front zero if it is present
+                if (value[0] === "0") value = value.slice(1);
+
+                if (value.length === 1) value = "00" + value;
+                else if (value.length === 2) value = "0" + value;
+
+
+                //move the . through array
+                for (var i = 0; i < value.length; i++) {
+                    if (i === value.length - 3) {
+                        formattedValue += value[i];
+                        formattedValue += ".";
+                    } else {
+                        formattedValue += value[i];
+                    }
+                }
+                this.amount = Number(formattedValue).toFixed(2);
+            }
+        }
+
+        window.customElements.define(OcInputAmount.is, OcInputAmount);
+    </script>
+</dom-module>
