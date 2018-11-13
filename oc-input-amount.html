@@ -17,8 +17,8 @@
                 }
             }
         </style>
-        <paper-input id="amount" required autofocus class="amount" type="number" inputmode="numeric" name="amount" prevent-invalid-input
-            value="{{amount}}" pattern="\s\d+(\.\d{1,2})*" min="0" step="0.01" placeholder="0.00" error="Not valid amount">
+        <paper-input id="amount" required autofocus="[[autofocus]]" class="amount" type="number" inputmode="numeric" name="amount" prevent-invalid-input
+                     value="{{amount}}" pattern="\s\d+(\.\d{1,2})*" min="0" step="0.01" placeholder="0.00" error="Not valid amount">
             <div id="currencyPrefix" slot="suffix" style="padding-right: 8px; opacity: 0.4; font-size:1.6em !important">
                 R
             </div>
@@ -46,6 +46,10 @@
                         notify: true,
                         observer: '_formatAmount'
                     },
+                    autofocus: {
+                        type: Boolean,
+                        value: false
+                    }
                 };
             }
 
